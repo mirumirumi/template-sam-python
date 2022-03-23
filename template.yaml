@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description:  xxxxxxx
+  
+
+Globals:
+  Function:
+    MemorySize: 128  # default
+    Timeout: 13
+    Layers:
+      - !Ref ImportModulesLayer
+      - !Ref UtilsLayer
+
+
+Parameters:
+  ResourcePrefix:
+    Type: String
+    Default: xxxxxxx
+  EnvironmentName:
+    Type: String
+    AllowedValues:
+      - dev
+      - prd
+
+
+Resources:
+  MainFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ResourcePrefix}-${EnvironmentName}-main
+      CodeUri: functions/main
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          ENVIRONMENT_NAME: !Sub ${EnvironmentName}
+      # Events:
+
+  ImportModulesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: import modules containing PowerTools
+      ContentUri: "functions/layers/import_modules_layer/"
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+  UtilsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: utils
+      ContentUri: "functions/layers/utils_layer/"
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
