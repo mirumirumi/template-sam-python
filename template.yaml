@@ -1,7 +1,7 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description:  xxxxxxx
-  
+Description: xxxxxxx
+
 
 Globals:
   Function:
@@ -10,6 +10,9 @@ Globals:
     Layers:
       - !Ref ImportModulesLayer
       - !Ref UtilsLayer
+    Environment:
+      Variables:
+        API_ALLOW_ORIGIN: !Sub ${ApiAllowOrigin}
 
 
 Parameters:
@@ -21,9 +24,21 @@ Parameters:
     AllowedValues:
       - dev
       - prd
+  ApiAllowOrigin:
+    Type: String
 
 
 Resources:
+  RestApis:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub ${ResourcePrefix}-${EnvironmentName}
+      StageName: !Sub ${ResourcePrefix}-${EnvironmentName}-apis
+      Cors:
+        AllowOrigin: !Sub "'${ApiAllowOrigin}'"
+        AllowHeaders: "'Content-Type, X-Amz-Date, X-Api-Key, Authorization, X-Amz-Security-Token'"
+        AllowMethods: "'GET, POST, PUT, DELETE, OPTIONS'"
+
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -33,10 +48,18 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      # Policies:
+      #   - 
       Environment:
         Variables:
           ENVIRONMENT_NAME: !Sub ${EnvironmentName}
-      # Events:
+      Events:
+        RestApis:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RestApis
+            Path: /main
+            Method: get
 
   ImportModulesLayer:
     Type: AWS::Serverless::LayerVersion
