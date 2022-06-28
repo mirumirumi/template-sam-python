@@ -1,22 +1,22 @@
 from __future__ import annotations
-from typing import Any, Final, NoReturn, TypedDict
+from typing import Any, cast, Literal, TypedDict
 
 import os
 import json
 import boto3
-import secret
+from proxy_response import *
 from aws_lambda_powertools.logging import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 # PowerTools
 logger = Logger()
 
-# Env Vars
+# Env vars
 ENVIRONMENT_NAME = os.environ["ENVIRONMENT_NAME"]
 
 
 @logger.inject_lambda_context
-def lambda_handler(event: object, context: LambdaContext) -> None:
+def lambda_handler(event: dict[str, Any], context: LambdaContext) -> ProxyResponse:
     logger.info(event)
 
 
@@ -27,5 +27,4 @@ def lambda_handler(event: object, context: LambdaContext) -> None:
 
 
 
-    logger.info("✅ Succeeded!")
     return
