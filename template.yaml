@@ -43,7 +43,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${ResourcePrefix}-${EnvironmentName}-main
-      CodeUri: functions/main
+      CodeUri: ./functions/main
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
@@ -65,7 +65,7 @@ Resources:
     Type: AWS::Serverless::LayerVersion
     Properties:
       Description: import modules containing PowerTools
-      ContentUri: "functions/layers/import_modules_layer/"
+      ContentUri: ./functions/layers/import_modules_layer
       CompatibleRuntimes:
         - python3.9
     Metadata:
@@ -74,7 +74,7 @@ Resources:
     Type: AWS::Serverless::LayerVersion
     Properties:
       Description: utils
-      ContentUri: "functions/layers/utils_layer/"
+      ContentUri: ./functions/layers/utils_layer
       CompatibleRuntimes:
         - python3.9
     Metadata:
