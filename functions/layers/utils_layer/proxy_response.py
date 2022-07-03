@@ -1,12 +1,20 @@
+from __future__ import annotations
+from typing import TypedDict
+
 import os
 import json
 import dynamodb
-from __future__ import annotations
 
 API_ALLOW_ORIGIN = os.getenv("API_ALLOW_ORIGIN")
 
+# types
+class ProxyResponse(TypedDict):
+    statusCode: int
+    headers: dict[str, str | None]
+    body: str
 
-def _200(val: object = None) -> dict[str, int | dict[str, str | None] | str]:
+
+def s200(val: object = None) -> ProxyResponse:
     return {
         "statusCode": 200,
         "headers": {
@@ -14,11 +22,12 @@ def _200(val: object = None) -> dict[str, int | dict[str, str | None] | str]:
         },
         "body": json.dumps(
             val if val is not None else "no response data",
-            default=dynamodb.decimal_to_float
+            default=dynamodb.decimal_to_float,
         )
     }
 
-def _500(val: object = None) -> dict[str, int | dict[str, str | None] | str]:
+
+def s500(val: object = None) -> ProxyResponse:
     return {
         "statusCode": 500,
         "headers": {
@@ -26,6 +35,6 @@ def _500(val: object = None) -> dict[str, int | dict[str, str | None] | str]:
         },
         "body": json.dumps(
             val if val is not None else "no response data",
-            default=dynamodb.decimal_to_float
+            default=dynamodb.decimal_to_float,
         )
     }
