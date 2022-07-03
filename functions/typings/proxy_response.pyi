@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, cast, Literal, TypedDict
+from typing import TypedDict
 
 
 class ProxyResponse(TypedDict):
