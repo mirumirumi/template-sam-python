@@ -51,8 +51,8 @@ Resources:
       # Policies:
       #   - 
       Environment:
-        Variables:
-          ENVIRONMENT_NAME: !Sub ${EnvironmentName}
+        # Variables:
+        #   _NAME: !Sub ${}
       Events:
         RestApis:
           Type: Api

@@ -11,9 +11,6 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 # PowerTools
 logger = Logger()
 
-# Env vars
-ENVIRONMENT_NAME = os.environ["ENVIRONMENT_NAME"]
-
 
 @logger.inject_lambda_context
 def lambda_handler(event: dict[str, Any], context: LambdaContext) -> ProxyResponse:
