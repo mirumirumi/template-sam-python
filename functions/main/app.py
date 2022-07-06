@@ -8,7 +8,6 @@ from proxy_response import *
 from aws_lambda_powertools.logging import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-# PowerTools
 logger = Logger()
 
 
