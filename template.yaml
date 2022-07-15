@@ -12,7 +12,7 @@ Globals:
       - !Ref UtilsLayer
     Environment:
       Variables:
-        API_ALLOW_ORIGIN: !Sub ${ApiAllowOrigin}
+        ALLOWED_CLIENT_ORIGIN: !Sub ${AllowedClientOrigin}
 
 
 Parameters:
@@ -24,7 +24,7 @@ Parameters:
     AllowedValues:
       - dev
       - prd
-  ApiAllowOrigin:
+  AllowedClientOrigin:
     Type: String
 
 
@@ -35,7 +35,7 @@ Resources:
       Name: !Sub ${ResourcePrefix}-${EnvironmentName}
       StageName: !Sub ${ResourcePrefix}-${EnvironmentName}-apis
       Cors:
-        AllowOrigin: !Sub "'${ApiAllowOrigin}'"
+        AllowOrigin: !Sub "'${AllowedClientOrigin}'"
         AllowHeaders: "'Content-Type, X-Amz-Date, X-Api-Key, Authorization, X-Amz-Security-Token'"
         AllowMethods: "'GET, POST, PUT, DELETE, OPTIONS'"
 

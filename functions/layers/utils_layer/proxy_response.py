@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Any, cast, Literal, TypedDict
+from typing import Any, cast, Literal, Optional, TypedDict
 
 import os
 import json
 import dynamodb
 
-API_ALLOW_ORIGIN = os.getenv("API_ALLOW_ORIGIN")
+ALLOWED_CLIENT_ORIGIN = os.getenv("ALLOWED_CLIENT_ORIGIN")
+
 
 class ProxyResponse(TypedDict):
     statusCode: int
@@ -16,7 +17,7 @@ def s200(val: object = None) -> ProxyResponse:
     return {
         "statusCode": 200,
         "headers": {
-            "Access-Control-Allow-Origin": API_ALLOW_ORIGIN
+            "Access-Control-Allow-Origin": ALLOWED_CLIENT_ORIGIN,
         },
         "body": json.dumps(
             val if val is not None else "no response data",
@@ -27,20 +28,26 @@ def s200(val: object = None) -> ProxyResponse:
 def s400() -> ProxyResponse:
     return {
         "statusCode": 400,
+        "headers": {
+            "Access-Control-Allow-Origin": ALLOWED_CLIENT_ORIGIN,
+        },
         "body": "required request data is missing or I/F schema is invalid",
     }
 
 def s403() -> ProxyResponse:
     return {
         "statusCode": 403,
-        "body": "required api key is missing or invalid",
+        "headers": {
+            "Access-Control-Allow-Origin": ALLOWED_CLIENT_ORIGIN,
+        },
+        "body": "required api key is missing or invalid, alternatively, your referrer is not allowed",
     }
 
 def s500(val: object = None) -> ProxyResponse:
     return {
         "statusCode": 500,
         "headers": {
-            "Access-Control-Allow-Origin": API_ALLOW_ORIGIN
+            "Access-Control-Allow-Origin": ALLOWED_CLIENT_ORIGIN,
         },
         "body": json.dumps(
             val if val is not None else "no response data",

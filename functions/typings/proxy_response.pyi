@@ -4,6 +4,7 @@ from typing import TypedDict
 
 class ProxyResponse(TypedDict):
     statusCode: int
+    headers: dict[str, str | None]
     body: str
 
 def s200(val: object = ...) -> ProxyResponse:

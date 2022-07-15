@@ -10,7 +10,7 @@ region = "ap-northeast-1"
 capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM"
 parameter_overrides = """\
     EnvironmentName=\"dev\" \
-    ApiAllowOrigin=\"http://localhost:8080\" \
+    AllowedClientOrigin=\"http://localhost:17329\" \
 """
 tags = "project=\"xxxxxxx\" env=\"dev\" IaC=\"cfn\""
 confirm_changeset = false
@@ -25,7 +25,7 @@ region = "ap-northeast-1"
 capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM"
 parameter_overrides = """\
     EnvironmentName=\"prd\" \
-    ApiAllowOrigin=\"https://\" \
+    AllowedClientOrigin=\"https://\" \
 """
 tags = "project=\"xxxxxxx\" env=\"prd\" IaC=\"cfn\""
 confirm_changeset = false
