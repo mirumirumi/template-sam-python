@@ -24,6 +24,7 @@ jobs:
 
       - name: decrypt gpg secret
         run: |
+          echo "${{ secrets.GPG_PASSPHRASE }}" | sudo gpg --batch --passphrase-fd 0 --output "samconfig.toml" --decrypt "samconfig.toml.gpg"
           echo "${{ secrets.GPG_PASSPHRASE }}" | sudo gpg --batch --passphrase-fd 0 --output "functions/main/secret.py" --decrypt "functions/main/secret.py.gpg"
 
       - run: sam build --use-container
