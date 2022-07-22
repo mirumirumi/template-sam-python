@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Any, cast, Literal, TypedDict
 
 import os
-import json
 import boto3
 from proxy_response import *
 from aws_lambda_powertools.logging import Logger
