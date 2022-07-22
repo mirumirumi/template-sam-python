@@ -1,5 +1,7 @@
 version = 0.1
 
+#                                      -- must be encrypted this file! --
+
 [dev]
 [dev.deploy]
 [dev.deploy.parameters]
@@ -11,6 +13,7 @@ capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM"
 parameter_overrides = """\
     EnvironmentName=\"dev\" \
     AllowedClientOrigin=\"http://localhost:17329\" \
+    UnHashedApiKey=\"xxxxxxxxxxxxxxxxxx\" \
 """
 tags = "project=\"xxxxxxx\" env=\"dev\" IaC=\"cfn\""
 confirm_changeset = false
@@ -26,6 +29,7 @@ capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM"
 parameter_overrides = """\
     EnvironmentName=\"prd\" \
     AllowedClientOrigin=\"https://\" \
+    UnHashedApiKey=\"xxxxxxxxxxxxxxxxxx\" \
 """
 tags = "project=\"xxxxxxx\" env=\"prd\" IaC=\"cfn\""
 confirm_changeset = false

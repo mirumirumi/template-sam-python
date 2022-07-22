@@ -3,18 +3,6 @@ Transform: AWS::Serverless-2016-10-31
 Description: xxxxxxx
 
 
-Globals:
-  Function:
-    MemorySize: 128  # default
-    Timeout: 13
-    Layers:
-      - !Ref ImportModulesLayer
-      - !Ref UtilsLayer
-    Environment:
-      Variables:
-        ALLOWED_CLIENT_ORIGIN: !Sub ${AllowedClientOrigin}
-
-
 Parameters:
   ResourcePrefix:
     Type: String
@@ -26,6 +14,20 @@ Parameters:
       - prd
   AllowedClientOrigin:
     Type: String
+  UnHashedApiKey:
+    Type: String
+
+
+Globals:
+  Function:
+    MemorySize: 128  # default
+    Timeout: 13
+    Layers:
+      - !Ref ImportModulesLayer
+      - !Ref UtilsLayer
+    Environment:
+      Variables:
+        ALLOWED_CLIENT_ORIGIN: !Ref AllowedClientOrigin
 
 
 Resources:
@@ -34,10 +36,29 @@ Resources:
     Properties:
       Name: !Sub ${ResourcePrefix}-${EnvironmentName}
       StageName: !Sub ${ResourcePrefix}-${EnvironmentName}-apis
+      Auth:
+        Authorizers:
+          KeyAuth:
+            FunctionArn: !GetAtt AuthorizeKeyFunction.Arn
+            Identity:
+              ReauthorizeEvery: 0
       Cors:
         AllowOrigin: !Sub "'${AllowedClientOrigin}'"
         AllowHeaders: "'Content-Type, X-Amz-Date, X-Api-Key, Authorization, X-Amz-Security-Token'"
         AllowMethods: "'GET, POST, PUT, DELETE, OPTIONS'"
+
+  AuthorizeKeyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ResourcePrefix}-${EnvironmentName}-authorize-key
+      CodeUri: ../functions/authorize_key
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          UNHASHED_KEY: !Ref UnHashedApiKey
 
   MainFunction:
     Type: AWS::Serverless::Function
@@ -50,9 +71,8 @@ Resources:
         - x86_64
       # Policies:
       #   - 
-      Environment:
+      # Environment:
         # Variables:
-        #   _NAME: !Sub ${}
       Events:
         RestApis:
           Type: Api
@@ -60,6 +80,8 @@ Resources:
             RestApiId: !Ref RestApis
             Path: /main
             Method: get
+            Auth: 
+              Authorizer: KeyAuth
 
   ImportModulesLayer:
     Type: AWS::Serverless::LayerVersion
